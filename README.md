@@ -197,14 +197,4 @@ scripts/     backup and restore helpers
 - Prometheus alert rules are included
 - retry and dead-letter behavior are included for reflection jobs
 
-Before public launch, still validate:
-
-- real provider credentials
-- EmbeddingGemma model download/access
-- HTTPS / reverse proxy
-- backup restore flow
-- full CI on your target infrastructure
-
-## Status
-
-MemoryOS is now a strong production-grade baseline for internal deployment, staged rollout, and further enterprise hardening. It is designed to be practical today and extensible tomorrow.
+It is designed to be practical today and extensible tomorrow.
