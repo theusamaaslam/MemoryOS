@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS organizations (
+    org_id VARCHAR(128) PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS apps (
+    app_id VARCHAR(128) PRIMARY KEY,
+    org_id VARCHAR(128) NOT NULL REFERENCES organizations(org_id),
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL
+);
+
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS role VARCHAR(32) NOT NULL DEFAULT 'member';
+
+CREATE INDEX IF NOT EXISTS idx_apps_org ON apps (org_id);

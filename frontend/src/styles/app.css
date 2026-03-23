@@ -1,0 +1,279 @@
+:root {
+  --bg: #08111f;
+  --panel: rgba(8, 24, 41, 0.78);
+  --panel-border: rgba(169, 198, 255, 0.14);
+  --text: #ebf2ff;
+  --muted: #a7b6d8;
+  --accent: #7ef0c6;
+  --accent-2: #ffc76b;
+  --danger: #ff7c88;
+  --grid: rgba(126, 240, 198, 0.08);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(126, 240, 198, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 199, 107, 0.16), transparent 22%),
+    linear-gradient(160deg, #07101c, #0d1c30 48%, #091421);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.login-shell,
+.app-shell {
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.login-shell {
+  display: grid;
+  place-items: center;
+}
+
+.login-card,
+.panel,
+.hero-panel {
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.login-card {
+  width: min(1080px, 100%);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  padding: 36px;
+  border-radius: 28px;
+}
+
+.login-copy h1,
+.topbar h1,
+.hero-copy h2,
+.panel h3 {
+  font-family: "Space Grotesk", sans-serif;
+  margin: 0 0 12px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+}
+
+.login-form {
+  display: grid;
+  gap: 16px;
+  align-self: center;
+}
+
+.login-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.login-form input {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(5, 11, 18, 0.9);
+  color: var(--text);
+  padding: 14px 16px;
+  border-radius: 14px;
+}
+
+.primary-button,
+.ghost-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--accent), #9ed6ff);
+  color: #06212c;
+  font-weight: 700;
+}
+
+.ghost-button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr;
+  gap: 20px;
+}
+
+.hero-panel {
+  min-height: 540px;
+  border-radius: 28px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-copy {
+  max-width: 540px;
+  position: relative;
+  z-index: 2;
+}
+
+.panel {
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.graph-stage {
+  min-height: 420px;
+  position: relative;
+  margin-top: 16px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at center, rgba(126, 240, 198, 0.08), transparent 45%),
+    rgba(3, 10, 17, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.graph-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.graph-edge {
+  stroke: rgba(169, 198, 255, 0.54);
+  stroke-width: 0.4;
+}
+
+.graph-edge-label {
+  fill: var(--muted);
+  font-size: 2px;
+}
+
+.graph-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 24, 41, 0.94);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  animation: float 5s ease-in-out infinite;
+}
+
+.graph-node span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.graph-node strong {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.graph-node-failure {
+  border-color: rgba(255, 124, 136, 0.4);
+}
+
+.graph-node-resolution {
+  border-color: rgba(255, 199, 107, 0.4);
+}
+
+.graph-node-preference {
+  border-color: rgba(126, 240, 198, 0.4);
+}
+
+.timeline-list,
+.docs-list {
+  display: grid;
+  gap: 12px;
+  color: var(--muted);
+  padding-left: 20px;
+}
+
+.empty-state,
+.error-text {
+  color: var(--muted);
+}
+
+.error-text {
+  color: var(--danger);
+  margin-top: 12px;
+}
+
+.docs-panel p {
+  color: var(--muted);
+}
+
+.code-block {
+  overflow: auto;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(4, 10, 18, 0.92);
+  color: #d4f6ec;
+}
+
+@keyframes float {
+  50% {
+    transform: translate(-50%, calc(-50% - 8px));
+  }
+}
+
+@media (max-width: 900px) {
+  .login-card,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: start;
+  }
+}

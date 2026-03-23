@@ -1,0 +1,17 @@
+groups:
+  - name: memoryos
+    rules:
+      - alert: MemoryOSBackendDown
+        expr: up{job="memoryos-backend"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MemoryOS backend is down"
+      - alert: MemoryOSHighErrorRate
+        expr: sum(rate(memoryos_http_requests_total{status=~"5.."}[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "MemoryOS backend is returning 5xx responses"
