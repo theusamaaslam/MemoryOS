@@ -350,10 +350,33 @@ MEMORYOS_GROQ_API_KEY=your_groq_api_key
 MEMORYOS_HUGGINGFACE_TOKEN=your_huggingface_token
 ```
 
-### 2. Start the stack
+### 2. Run the single Docker stack
+
+MemoryOS ships with one root [`docker-compose.yml`](./docker-compose.yml) that brings up the full local stack:
+
+- `postgres` for durable relational storage and pgvector
+- `redis` for hot conversation memory and worker queues
+- `backend` for REST, MCP, auth, retrieval, and graph APIs
+- `worker` for reflection and background jobs
+- `frontend` for the dashboard and admin UI
+- `prometheus` for local metrics and alert inspection
+
+To build or rebuild everything from that single file:
 
 ```bash
 docker compose up -d --build
+```
+
+If you only want to rebuild the app containers while keeping the data services running, use:
+
+```bash
+docker compose up -d --build backend worker frontend
+```
+
+To stop the stack later:
+
+```bash
+docker compose down
 ```
 
 ### 3. Access services
@@ -405,23 +428,5 @@ scripts/     backup and restore helpers
 - secure response headers are enabled
 - Prometheus alert rules are included
 - retry and dead-letter behavior are included for reflection jobs
-
-## Status
-
-MemoryOS is now moving from "memory utilities" toward "operational memory for production agents."
-
-The backend foundation now supports:
-
-- durable tenant conversations
-- shared app memory
-- private user memory
-- source-aware ingestion with durable source identity
-- hybrid retrieval with embeddings, graph expansion, reranking, and vague-query rewrite
-- MCP-first chat/runtime tools
-- reviewable memory promotion
-- answer traceability
-- admin graph repair
-
-That makes it a much stronger base for building agents that improve over time without becoming a black box.
 
 It is designed to be practical today and extensible tomorrow.
