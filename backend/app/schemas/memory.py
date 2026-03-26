@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from app.models.domain import MemoryLayer, Outcome
+from app.models.domain import MemoryLayer, MemoryScope, Outcome
 
 
 class ScopeModel(BaseModel):
@@ -20,6 +20,7 @@ class RememberRequest(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
     source: str = "interaction"
     layer: MemoryLayer = MemoryLayer.SESSION
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
 
 
 class EventRequest(BaseModel):
@@ -47,11 +48,13 @@ class RecallRequest(BaseModel):
 
 class ScopeRequest(BaseModel):
     scope: ScopeModel
+    memory_scope: MemoryScope = MemoryScope.APP
 
 
 class ReflectionEnqueueRequest(BaseModel):
     scope: ScopeModel
     reason: str = "manual"
+    memory_scope: MemoryScope = MemoryScope.APP
 
 
 class MemoryResponse(BaseModel):
@@ -66,9 +69,23 @@ class MemoryResponse(BaseModel):
 
 class RetrievalTraceResponse(BaseModel):
     query: str
+    rewritten_query: str | None = None
+    query_rewrite_applied: bool = False
+    query_rewrite_reason: str | None = None
     layers_consulted: list[MemoryLayer]
+    query_mode: str = "hybrid"
+    query_intent: str = "general"
+    scope_bias: str = "balanced"
+    graph_strategy: str = "focused"
+    grounding_policy: str = "balanced"
+    freshness_bias: str = "normal"
+    preferred_layers: list[MemoryLayer] = Field(default_factory=list)
+    expansion_terms: list[str] = Field(default_factory=list)
     ranking_factors: list[str]
     reasons: list[str]
+    graph_matches: int = 0
+    graph_expansions: int = 0
+    retrieval_hint_matches: int = 0
 
 
 class RecallResponse(BaseModel):
@@ -83,6 +100,10 @@ class GraphNodeResponse(BaseModel):
     confidence: float
     evidence_ids: list[str]
     metadata: dict[str, Any]
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
+    scope_ref: str | None = None
+    conversation_id: str | None = None
+    evidence_preview: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class GraphEdgeResponse(BaseModel):
@@ -93,9 +114,28 @@ class GraphEdgeResponse(BaseModel):
     confidence: float
     evidence_ids: list[str]
     metadata: dict[str, Any]
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
+    scope_ref: str | None = None
+    conversation_id: str | None = None
+    evidence_preview: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class GraphSummaryResponse(BaseModel):
+    node_count: int = 0
+    edge_count: int = 0
+    evidence_count: int = 0
+    source_count: int = 0
+    orphan_node_count: int = 0
+    duplicate_label_count: int = 0
+    ungrounded_node_count: int = 0
+    ungrounded_edge_count: int = 0
+    source_names: list[str] = Field(default_factory=list)
 
 
 class GraphResponse(BaseModel):
+    memory_scope: MemoryScope = MemoryScope.APP
+    scope_counts: dict[str, dict[str, int]] = Field(default_factory=dict)
+    summary: GraphSummaryResponse = Field(default_factory=GraphSummaryResponse)
     nodes: list[GraphNodeResponse]
     edges: list[GraphEdgeResponse]
 
@@ -104,6 +144,7 @@ class ReflectionJobResponse(BaseModel):
     job_id: str
     status: str
     summary: str
+    provider: str | None = None
 
 
 class TimelineItemResponse(BaseModel):
@@ -117,3 +158,17 @@ class TimelineItemResponse(BaseModel):
 
 class TimelineResponse(BaseModel):
     items: list[TimelineItemResponse]
+
+
+class SessionSummaryResponse(BaseModel):
+    session_id: str
+    last_activity_at: datetime | None = None
+    memory_count: int = 0
+    event_count: int = 0
+    title: str | None = None
+    status: str | None = None
+    agent_id: str | None = None
+
+
+class SessionListResponse(BaseModel):
+    items: list[SessionSummaryResponse]

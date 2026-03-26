@@ -14,7 +14,7 @@ from app.core.db import session_scope
 from app.models.persistence import ApiKeyModel, AppModel, OrganizationModel, RefreshTokenModel, UserModel
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__truncate_error=False)
 
 
 @dataclass(slots=True)

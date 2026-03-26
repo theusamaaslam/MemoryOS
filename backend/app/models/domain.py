@@ -24,6 +24,25 @@ class Outcome(str, Enum):
     PARTIAL = "partial"
 
 
+class MemoryScope(str, Enum):
+    CONVERSATION = "conversation"
+    USER = "user"
+    APP = "app"
+
+
+class MemoryCandidateStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    AUTO_PROMOTED = "auto_promoted"
+
+
+class ConversationStatus(str, Enum):
+    ACTIVE = "active"
+    ARCHIVED = "archived"
+    RESOLVED = "resolved"
+
+
 @dataclass(slots=True)
 class Scope:
     org_id: str
@@ -42,6 +61,9 @@ class MemoryRecord:
     confidence: float = 0.5
     tags: list[str] = field(default_factory=list)
     source: str = "interaction"
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
+    scope_ref: str | None = None
+    conversation_id: str | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
@@ -66,6 +88,9 @@ class GraphNode:
     confidence: float = 0.5
     evidence_ids: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
+    scope_ref: str | None = None
+    conversation_id: str | None = None
 
 
 @dataclass(slots=True)
@@ -78,3 +103,6 @@ class GraphEdge:
     confidence: float = 0.5
     evidence_ids: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+    memory_scope: MemoryScope = MemoryScope.CONVERSATION
+    scope_ref: str | None = None
+    conversation_id: str | None = None

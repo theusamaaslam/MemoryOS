@@ -30,11 +30,12 @@ services:
     build:
       context: ./backend
     restart: unless-stopped
+    ports:
+      - "8000:8000"
     environment:
       MEMORYOS_JWT_SECRET: ${MEMORYOS_JWT_SECRET:-change-this-in-production}
       MEMORYOS_DEFAULT_PROVIDER: ${MEMORYOS_DEFAULT_PROVIDER:-heuristic}
-      MEMORYOS_EMBEDDING_PROVIDER: embeddinggemma
-      MEMORYOS_EMBEDDING_MODEL_ID: ${MEMORYOS_EMBEDDING_MODEL_ID:-google/embeddinggemma-300m}
+      MEMORYOS_EMBEDDING_MODEL_ID: ${MEMORYOS_EMBEDDING_MODEL_ID:-sentence-transformers/all-mpnet-base-v2}
       MEMORYOS_HUGGINGFACE_TOKEN: ${MEMORYOS_HUGGINGFACE_TOKEN:-}
       MEMORYOS_OPENAI_API_KEY: ${MEMORYOS_OPENAI_API_KEY:-}
       MEMORYOS_OPENAI_MODEL: ${MEMORYOS_OPENAI_MODEL:-gpt-4o-mini}
@@ -46,7 +47,7 @@ services:
       MEMORYOS_GROQ_MODEL: ${MEMORYOS_GROQ_MODEL:-llama-3.3-70b-versatile}
       MEMORYOS_CORS_ORIGINS: ${MEMORYOS_CORS_ORIGINS:-http://localhost,http://127.0.0.1,http://localhost:5173}
       MEMORYOS_REDIS_URL: redis://redis:6379/0
-      MEMORYOS_POSTGRES_URL: postgresql://${POSTGRES_USER:-memoryos}:${POSTGRES_PASSWORD:-memoryos}@postgres:5432/${POSTGRES_DB:-memoryos}
+      MEMORYOS_POSTGRES_URL: postgresql+psycopg://${POSTGRES_USER:-memoryos}:${POSTGRES_PASSWORD:-memoryos}@postgres:5432/${POSTGRES_DB:-memoryos}
     volumes:
       - huggingface_cache:/models/huggingface
     depends_on:
@@ -74,8 +75,7 @@ services:
     environment:
       MEMORYOS_JWT_SECRET: ${MEMORYOS_JWT_SECRET:-change-this-in-production}
       MEMORYOS_DEFAULT_PROVIDER: ${MEMORYOS_DEFAULT_PROVIDER:-heuristic}
-      MEMORYOS_EMBEDDING_PROVIDER: embeddinggemma
-      MEMORYOS_EMBEDDING_MODEL_ID: ${MEMORYOS_EMBEDDING_MODEL_ID:-google/embeddinggemma-300m}
+      MEMORYOS_EMBEDDING_MODEL_ID: ${MEMORYOS_EMBEDDING_MODEL_ID:-sentence-transformers/all-mpnet-base-v2}
       MEMORYOS_HUGGINGFACE_TOKEN: ${MEMORYOS_HUGGINGFACE_TOKEN:-}
       MEMORYOS_OPENAI_API_KEY: ${MEMORYOS_OPENAI_API_KEY:-}
       MEMORYOS_OPENAI_MODEL: ${MEMORYOS_OPENAI_MODEL:-gpt-4o-mini}
@@ -87,7 +87,7 @@ services:
       MEMORYOS_GROQ_MODEL: ${MEMORYOS_GROQ_MODEL:-llama-3.3-70b-versatile}
       MEMORYOS_CORS_ORIGINS: ${MEMORYOS_CORS_ORIGINS:-http://localhost,http://127.0.0.1,http://localhost:5173}
       MEMORYOS_REDIS_URL: redis://redis:6379/0
-      MEMORYOS_POSTGRES_URL: postgresql://${POSTGRES_USER:-memoryos}:${POSTGRES_PASSWORD:-memoryos}@postgres:5432/${POSTGRES_DB:-memoryos}
+      MEMORYOS_POSTGRES_URL: postgresql+psycopg://${POSTGRES_USER:-memoryos}:${POSTGRES_PASSWORD:-memoryos}@postgres:5432/${POSTGRES_DB:-memoryos}
     volumes:
       - huggingface_cache:/models/huggingface
     depends_on:
@@ -104,7 +104,7 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "80:80"
+      - "8080:80"
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/ >/dev/null 2>&1 || exit 1"]
       interval: 15s

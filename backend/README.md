@@ -4,6 +4,7 @@ FastAPI backend for MemoryOS. This starter ships:
 
 - `REST API` for auth, memory operations, ingestion, graph, and reflection
 - `MCP-style tool endpoints` for agent integration
+- `Conversation ledger` APIs and MCP tools for durable tenant-visible threads
 - Postgres-backed auth, events, memories, and graph persistence
 - Redis-backed session memory
 - provider abstraction for OpenAI, Anthropic, Gemini, and Groq
@@ -32,3 +33,4 @@ python -m uvicorn app.main:app --reload
 - Owners/admins can create apps and API keys under their organization through the auth routes.
 - Owners/admins can also list org users and update member roles.
 - OpenAPI docs are exposed by FastAPI at `/docs`.
+- Conversation runtime now persists turns, retrieval traces, audits, tool invocations, reviewable memory candidates, and admin graph merge actions through a shared REST/MCP service layer.

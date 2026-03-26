@@ -82,7 +82,7 @@ def create_app(payload: AppCreateRequest, identity: dict = Depends(require_admin
 
 
 @router.get("/apps", response_model=list[AppResponse])
-def list_apps(identity: dict = Depends(require_admin)) -> list[AppResponse]:
+def list_apps(identity: dict = Depends(require_auth)) -> list[AppResponse]:
     return [AppResponse(app_id=app.app_id, org_id=app.org_id, name=app.name) for app in auth_service.list_apps(identity["org_id"])]
 
 
